@@ -9,9 +9,10 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from "react-native";
-
+import * as ImagePicker from 'expo-image-picker'
 
 
 export default function CreateProductForm() {
@@ -20,23 +21,51 @@ export default function CreateProductForm() {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [loading, setloading] = useState(false)
+  const [image, setImage] = useState(null)
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
 
   const handleSubmit = async () => {
     setloading(true)
+
+    const formData = new FormData()
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("price", price)
+    formData.append("category", category)
+    formData.append("image", {
+      uri: image,
+      type: "image/jpeg",
+      name: "image.jpeg",
+    })
+
     try {
       console.log("function is running");
-      const res = await axios.post("http://192.168.29.75:8000/product/createProducts", {
-        title,
-        description,
-        price,
-        category,
+      const res = await axios.post("http://192.168.29.28:8000/product/createProducts", formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        }
       });
       console.log(res.data);
       // Alert.alert("Success", "Product created successfully!");
       setloading(false)
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
       // Alert.alert("Error", err.message);
       setloading(false)
     }
@@ -78,9 +107,11 @@ export default function CreateProductForm() {
         value={category}
         onChangeText={setCategory}
       />
-      {/* <TouchableOpacity onPress={handleSubmit}>
-        <Text >Submit</Text>
-      </TouchableOpacity> */}
+
+      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      {image && <Image source={{ uri: image }} style={styles.image} />}
+
+
       {loading ? <ActivityIndicator /> : <Button title="Submit Product" onPress={handleSubmit} />}
     </ScrollView>
   );
@@ -106,6 +137,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     marginBottom: 15,
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
 });
 
