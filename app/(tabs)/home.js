@@ -7,7 +7,7 @@ import axios from "axios";
 
 export default function Home() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [data,setData] = useState([])
+    const [data, setData] = useState([])
     console.log(data.length)
     // Filter products based on search query
     const filteredProducts = products.filter((item) =>
@@ -17,7 +17,7 @@ export default function Home() {
     const getProducts = async () => {
         try {
             console.log("function is running");
-            const res = await axios.get("http://192.168.29.75:8000/product/allProducts");
+            const res = await axios.get("http://192.168.29.28:8000/product/allProducts");
             setData(res.data.data)
             // Alert.alert("Success", "Product created successfully!");
         } catch (err) {
