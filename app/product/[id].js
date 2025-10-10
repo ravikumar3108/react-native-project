@@ -1,28 +1,51 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { products } from "../../data/product";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import API from "../../utils/api";
 
 export default function ProductDetails() {
-  const { id } = useLocalSearchParams();
-  const router = useRouter();
 
-  const product = products.find((item) => item.id === id);
+  const { id } = useLocalSearchParams()
 
-  if (!product) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.error}>Product not found</Text>
-      </View>
-    );
-  }
+  const [data, setData] = useState([])
+  // Filter products based on search query
+
+  const getProducts = async () => {
+    try {
+      const res = await API.get("product/allProducts");
+      setData(res.data.data)
+      // Alert.alert("Success", "Product created successfully!");
+    } catch (err) {
+      console.log(err.message);
+      // Alert.alert("Error", err.message);
+    }
+
+  };
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+  const product = data.find((item) => item._id == id)
+  console.log(product)
+
+  // if (!product) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text style={styles.error}>Product not found</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={{ uri: product.image }} style={styles.image} />
-      <Text style={styles.name}>{product.name}</Text>
-      <Text style={styles.price}>${product.price}</Text>
+      {/* <Image source={{ uri: product.image }} style={styles.image} /> */}
+      <Text style={styles.name}>{product?.title}</Text>
+      <Text style={styles.price}>${product?.price}</Text>
       <Text style={styles.description}>
-        This is a detailed description of {product.name}. It's a high-quality product that you will love!
+        This is a detailed description of {product?.title}. It's a high-quality product that you will love!
       </Text>
 
       <TouchableOpacity style={styles.button} onPress={() => router.push('cart')}>
@@ -33,6 +56,7 @@ export default function ProductDetails() {
         <Text style={styles.backText}>⬅ Back</Text>
       </TouchableOpacity>
     </ScrollView>
+
   );
 }
 

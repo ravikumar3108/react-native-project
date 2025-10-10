@@ -4,20 +4,21 @@ import SearchBar from "../../components/SearchBar";
 import ProductCard from "../../components/ProductCard";
 import { products } from "../../data/product";
 import axios from "axios";
+import API from "../../utils/api";
 
 export default function Home() {
     const [searchQuery, setSearchQuery] = useState("");
     const [data, setData] = useState([])
     console.log(data.length)
     // Filter products based on search query
-    const filteredProducts = products.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredProducts = data.filter((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const getProducts = async () => {
         try {
             console.log("function is running");
-            const res = await axios.get("http://192.168.29.28:8000/product/allProducts");
+            const res = await API.get("product/allProducts");
             setData(res.data.data)
             // Alert.alert("Success", "Product created successfully!");
         } catch (err) {

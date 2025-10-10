@@ -7,9 +7,9 @@ export default function ProductCard({ product }) {
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => router.push(`/product/${product.id}`)}
+      onPress={() => router.push(`/product/${product._id}`)}
     >
-      <Image source={{ uri: `http://192.168.29.28:8000/uploads/${product?.image}` }} style={styles.image} />
+      <Image source={{ uri: `http://192.168.29.30:8000/uploads/${product?.image}` }} style={styles.image} />
       <Text style={styles.name}>{product.name}</Text>
       <Text style={styles.price}>${product.price}</Text>
       <View style={styles.button}>
