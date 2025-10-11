@@ -1,42 +1,39 @@
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import CartItem from "../../components/CartItem";
+import { useEffect, useState } from "react";
+import API from "../../utils/api";
 
-const dummyCart = [
-  {
-    id: "1",
-    name: "Nike Shoes",
-    price: 120,
-    image: "https://via.placeholder.com/200x150.png?text=Nike+Shoes",
-    quantity: 1,
-  },
-  {
-    id: "2",
-    name: "Adidas T-shirt",
-    price: 45,
-    image: "https://via.placeholder.com/200x150.png?text=Adidas+T-shirt",
-    quantity: 2,
-  },
-];
 
 export default function Cart() {
-  const total = dummyCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const [cartData, setCartData] = useState([])
+
+  const getCartProducts = async () => {
+    const addData = await API.get(`productCart/getCart`).then((res) => {
+      console.log(res.data.message)
+      setCartData(res.data.message)
+    })
+  }
+
+  useEffect(() => {
+    getCartProducts()
+  }, [])
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>🛒 Your Cart</Text>
-      {dummyCart.length > 0 ? (
+      {cartData.length > 0 ? (
         <>
           <FlatList
-            data={dummyCart}
+            data={cartData}
             renderItem={({ item }) => <CartItem item={item} />}
             keyExtractor={(item) => item.id}
           />
-          <View style={styles.footer}>
+          {/* <View style={styles.footer}>
             <Text style={styles.total}>Total: ${total.toFixed(2)}</Text>
             <TouchableOpacity style={styles.checkoutButton}>
               <Text style={styles.checkoutText}>Proceed to Checkout</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </>
       ) : (
         <Text style={styles.empty}>Your cart is empty 🛍️</Text>

@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import { products } from "../../data/product";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -21,7 +21,6 @@ export default function ProductDetails() {
       console.log(err.message);
       // Alert.alert("Error", err.message);
     }
-
   };
 
   useEffect(() => {
@@ -29,7 +28,18 @@ export default function ProductDetails() {
   }, [])
 
   const product = data.find((item) => item._id == id)
-  console.log(product)
+  // console.log(product)
+
+
+  const handleAddToCart = async (productId) => {
+    console.log(productId)
+    const addData = await API.post(`productCart/addtocart/${productId}`).then((res) => {
+      console.log(res.data.message)
+    })
+    setTimeout(() => {
+      router.push("cart")
+    }, 2000);
+  }
 
   // if (!product) {
   //   return (
@@ -48,7 +58,7 @@ export default function ProductDetails() {
         This is a detailed description of {product?.title}. It's a high-quality product that you will love!
       </Text>
 
-      <TouchableOpacity style={styles.button} onPress={() => router.push('cart')}>
+      <TouchableOpacity style={styles.button} onPress={() => handleAddToCart(product?._id)}>
         <Text style={styles.buttonText}>Add to Cart</Text>
       </TouchableOpacity>
 

@@ -2,22 +2,23 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function CartItem({ item }) {
   return (
+
     <View style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.image} />
       <View style={styles.info}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.price}>${item.price}</Text>
+        <Text style={styles.name}>{item?.item?.title}</Text>
+        <Text style={styles.price}>${item?.item?.price * item?.quantity}</Text>
         <View style={styles.actions}>
           <TouchableOpacity style={styles.qtyButton}>
             <Text style={styles.qtyText}>-</Text>
           </TouchableOpacity>
-          <Text style={styles.qty}>{item.quantity}</Text>
+          <Text style={styles.qty}>{item?.quantity}</Text>
           <TouchableOpacity style={styles.qtyButton}>
             <Text style={styles.qtyText}>+</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.removeButton}>
+      <TouchableOpacity style={styles.removeButton} >
         <Text style={styles.removeText}>❌</Text>
       </TouchableOpacity>
     </View>
