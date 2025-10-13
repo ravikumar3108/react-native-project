@@ -13,8 +13,6 @@ export default function Login() {
   const router = useRouter();
 
 
-
-
   // const handleLogin = async () => {
 
   //   // Ipv4 address : - 192.168.29.98

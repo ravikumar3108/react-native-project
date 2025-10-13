@@ -7,13 +7,9 @@ import axios from "axios";
 import API from "../../utils/api";
 
 export default function Home() {
-    const [searchQuery, setSearchQuery] = useState("");
     const [data, setData] = useState([])
-    console.log(data.length)
     // Filter products based on search query
-    const filteredProducts = data.filter((item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const [searchData, setSearchData] = useState("")
 
     const getProducts = async () => {
         try {
@@ -25,31 +21,35 @@ export default function Home() {
             console.log(err.message);
             // Alert.alert("Error", err.message);
         }
-
     };
 
+    const filterSerachData = data.filter((item) =>
+        item.title.toLowerCase().includes(searchData.toLowerCase())
+    )
+    console.log(filterSerachData)
     useEffect(() => {
         getProducts()
     }, [])
 
+
     return (
         <View style={styles.container}>
             {/* Search Bar */}
-            <SearchBar value={searchQuery} onChangeText={setSearchQuery} />
+            <SearchBar value={searchData} onChangeText={setSearchData} />
 
             {/* Header */}
             <Text style={styles.header}>🛍️ Products {data.length}</Text>
 
             {/* Products Grid */}
             <FlatList
-                data={data}
+                data={filterSerachData}
                 renderItem={({ item }) => <ProductCard product={item} />}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
                 contentContainerStyle={styles.list}
             />
 
-            {filteredProducts.length === 0 && (
+            {filterSerachData.length === 0 && (
                 <Text style={styles.noData}>No products found 😢</Text>
             )}
         </View>

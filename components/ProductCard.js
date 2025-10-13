@@ -10,7 +10,7 @@ export default function ProductCard({ product }) {
       onPress={() => router.push(`/product/${product._id}`)}
     >
       <Image source={{ uri: `http://192.168.29.30:8000/uploads/${product?.image}` }} style={styles.image} />
-      <Text style={styles.name}>{product.name}</Text>
+      <Text style={styles.name}>{product.title}</Text>
       <Text style={styles.price}>${product.price}</Text>
       <View style={styles.button}>
         <Text style={styles.buttonText}>View Details</Text>
