@@ -9,7 +9,6 @@ export default function Cart() {
 
   const getCartProducts = async () => {
     const addData = await API.get(`productCart/getCart`).then((res) => {
-      console.log(res.data.message)
       setCartData(res.data.message)
     })
   }
@@ -25,7 +24,7 @@ export default function Cart() {
         <>
           <FlatList
             data={cartData}
-            renderItem={({ item }) => <CartItem item={item} />}
+            renderItem={({ item }) => <CartItem item={item} getCartProducts={getCartProducts} cartData={cartData}/>}
             keyExtractor={(item) => item.id}
           />
           {/* <View style={styles.footer}>
